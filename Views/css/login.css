@@ -1,109 +1,411 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+/* ========================================
+   LOGIN & REGISTER CSS - MODERN CLEAN
+   Background: Soft Red Gradient
+   Fully Responsive & Centered
+   ======================================== */
+
+* {
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
-.form-container {
-    background: #fff;
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 22px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    padding: 0;
     box-sizing: border-box;
 }
 
-.password-container {
-    position: relative;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn {
-    background-color: #c62828;
-    color: white;
-    border: none;
-    padding: 12px;
+html {
+    height: 100%;
     width: 100%;
-    border-radius: 6px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ef5350 0%, #e53935 30%, #d32f2f 60%, #c62828 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    margin: 0;
+}
+
+/* Subtle decorative overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(198, 40, 40, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ========== FORM CONTAINER ========== */
+.form-container {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(198, 40, 40, 0.15);
+    width: 100%;
+    max-width: 480px;
+    padding: 50px 45px;
+    position: relative;
+    z-index: 10;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== HEADING ========== */
+.form-container h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+/* ========== FORM ========== */
+.form-container form {
+    margin-bottom: 28px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container input[type="tel"] {
+    width: 100%;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    color: #2c2c2c;
+    font-weight: 400;
+}
+
+.form-container input:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: #c62828;
+    box-shadow: 0 0 0 4px rgba(198, 40, 40, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-container input::placeholder {
+    color: #aaa;
+}
+
+/* ========== BUTTON ========== */
+.btn {
+    width: 100%;
+    padding: 17px 20px;
+    background: linear-gradient(135deg, #c62828 0%, #a41e1e 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
     font-size: 16px;
-    margin-top: 15px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 10px;
+    box-shadow: 0 6px 20px rgba(198, 40, 40, 0.3);
 }
 
 .btn:hover {
-    background-color: #a41e1e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(198, 40, 40, 0.4);
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
 }
 
-.policy {
-    font-size: 12px;
-    color: #555;
-    margin: 10px 0;
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
 }
 
-.policy a {
-    color: #c62828;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.link {
-    display: block;
-    margin-top: 10px;
+/* ========== ERROR & SUCCESS MESSAGES ========== */
+.form-container p[style*="color:red"],
+.form-container > p:first-of-type {
+    background: #ffebee;
+    color: #c62828 !important;
+    padding: 15px 18px;
+    border-radius: 12px;
+    margin: 18px 0;
     font-size: 14px;
+    font-weight: 600;
+    border-left: 5px solid #c62828;
+    animation: slideDown 0.4s ease-out;
+}
+
+.form-container div[style*="background:#ffdddd"],
+.form-container div[style*="background:#ddffdd"] {
+    padding: 15px 18px !important;
+    border-radius: 12px !important;
+    margin-bottom: 18px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    animation: slideDown 0.4s ease-out !important;
+}
+
+.form-container div[style*="background:#ffdddd"] {
+    background: #ffebee !important;
+    color: #c62828 !important;
+    border-left: 5px solid #c62828 !important;
+}
+
+.form-container div[style*="background:#ddffdd"] {
+    background: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border-left: 5px solid #2e7d32 !important;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hide empty error messages */
+.form-container p[style*="color:red"]:empty {
+    display: none;
+}
+
+/* ========== FOOTER TEXT & LINKS ========== */
+.form-container > p:last-child {
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+    margin-top: 25px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    background: transparent !important;
+    font-weight: 400;
+}
+
+.form-container a {
     color: #c62828;
     text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
 }
-.link:hover {
+
+.form-container a:hover {
+    color: #d32f2f;
     text-decoration: underline;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablet */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .form-container {
+        max-width: 500px;
+        padding: 45px 40px;
+    }
+    
+    .form-container h2 {
+        font-size: 30px;
+        margin-bottom: 35px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    body {
+        padding: 15px;
+        align-items: center;
+    }
+
+    .form-container {
+        max-width: 100%;
+        padding: 40px 30px;
+        border-radius: 20px;
+    }
+
+    .form-container h2 {
+        font-size: 28px;
+        margin-bottom: 32px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"] {
+        padding: 15px 18px;
+        font-size: 16px;
+        margin-bottom: 16px;
+    }
+
+    .btn {
+        padding: 16px 18px;
+        font-size: 15px;
+    }
 }
 
 @media (max-width: 480px) {
     body {
-        padding: 20px;
-        height: auto;
+        padding: 12px;
     }
 
     .form-container {
-        padding: 20px;
-        width: 100%;
+        padding: 35px 25px;
+        border-radius: 18px;
     }
 
-    h2 {
-        font-size: 18px;
+    .form-container h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
     }
 
-    input, .btn {
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"] {
+        padding: 14px 16px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+
+    .btn {
+        padding: 15px 16px;
         font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .form-container > p:last-child {
+        font-size: 14px;
+        margin-top: 22px;
+        padding-top: 22px;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 360px) {
+    body {
         padding: 10px;
+    }
+
+    .form-container {
+        padding: 30px 22px;
+        border-radius: 16px;
+    }
+
+    .form-container h2 {
+        font-size: 24px;
+        margin-bottom: 28px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"] {
+        padding: 13px 15px;
+        margin-bottom: 14px;
+    }
+
+    .btn {
+        padding: 14px 15px;
+        font-size: 13px;
+    }
+}
+
+/* ========== LANDSCAPE MODE FIX ========== */
+@media (max-height: 600px) and (orientation: landscape) {
+    body {
+        align-items: flex-start;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .form-container {
+        margin: 20px auto;
+        max-width: 450px;
+        padding: 30px 35px;
+    }
+
+    .form-container h2 {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"] {
+        padding: 12px 16px;
+        margin-bottom: 12px;
+    }
+
+    .btn {
+        padding: 13px 16px;
+        margin-top: 8px;
+    }
+
+    .form-container > p:last-child {
+        margin-top: 18px;
+        padding-top: 18px;
+    }
+}
+
+/* ========== LARGE DESKTOP ========== */
+@media (min-width: 1200px) {
+    .form-container {
+        max-width: 520px;
+        padding: 55px 50px;
+    }
+
+    .form-container h2 {
+        font-size: 34px;
+        margin-bottom: 42px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="password"],
+    .form-container input[type="tel"] {
+        padding: 17px 22px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        padding: 18px 22px;
+        font-size: 17px;
     }
 }

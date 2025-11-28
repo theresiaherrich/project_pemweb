@@ -20,7 +20,7 @@ document.addEventListener('click', function(e) {
 // Logout function
 function logout() {
   if (confirm("Yakin ingin logout?")) {
-    window.location.href = "logout.php";
+    window.location.href = "index.php?page=logout";
   }
 }
 

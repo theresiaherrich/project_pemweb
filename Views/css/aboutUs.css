@@ -95,14 +95,14 @@ body {
 }
 
 .nav-menu a.active {
-  color: #ffdada;
+  color: #ffffff;
   background: none;
   border-bottom: 3px solid #fff;
 }
 
 .nav-menu a:hover {
   background: none;
-  color: #ffdada;
+  color: #ffffff;
 }
 
 .dropdown { position: relative; }

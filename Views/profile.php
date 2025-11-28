@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -6,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/project/Views/css/profile.css">
+<link rel="stylesheet" href="/Views/css/profile.css">
 </head>
 
 <body>
 
   <div class="card">
     <div class="card-header">
-      <a href="home.php" class="back-btn"><i class="fas fa-times"></i></a>
+      <a href="index.php?page=home" class="back-btn"><i class="fas fa-times"></i></a>
       <div class="profile-pic">
         <img src="<?= htmlspecialchars($photoPath) ?>" alt="Profile">
       </div>
@@ -50,7 +51,7 @@
       </div>
 
       <div class="button-group">
-        <button class="btn btn-edit" onclick="window.location.href='edit-profile.php'">
+        <button class="btn btn-edit" onclick="window.location.href='index.php?page=edit_profile'">
           <i class="fas fa-user-edit"></i> Edit Profile
         </button>
         <form method="get" style="width: 100%;">

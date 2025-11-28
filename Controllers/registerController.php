@@ -2,8 +2,15 @@
 session_start();
 include __DIR__ . '/../model/koneksi.php';
 
+if (isset($_SESSION['user'])) {
+    header("Location: ?page=home"); 
+    exit();
+}
+
+$error = "";
+$success = "";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  // Sanitasi input agar lebih aman
   $name = htmlspecialchars(trim($_POST['name']));
   $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
   $password = trim($_POST['password']);
@@ -13,49 +20,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   // Validasi dasar
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo "<script>alert('Format email tidak valid!'); window.history.back();</script>";
-    exit;
-  }
-  if (strlen($password) < 6) {
-    echo "<script>alert('Password minimal 6 karakter!'); window.history.back();</script>";
-    exit;
-  }
-  if ($password !== $confirm) {
-    echo "<script>alert('Password tidak sama!'); window.history.back();</script>";
-    exit;
+    $error = "Format email tidak valid!";
+  } elseif (strlen($password) < 6) {
+    $error = "Password minimal 6 karakter!";
+  } elseif ($password !== $confirm) {
+    $error = "Password tidak sama!";
   }
 
-  // Cek email sudah digunakan atau belum (pakai prepared statement)
-  $checkQuery = "SELECT id FROM users WHERE email = ?";
-  $checkStmt = mysqli_prepare($conn, $checkQuery);
-  mysqli_stmt_bind_param($checkStmt, "s", $email);
-  mysqli_stmt_execute($checkStmt);
-  mysqli_stmt_store_result($checkStmt);
+  if ($error === "") {
+    // Cek email
+    $checkQuery = "SELECT id FROM users WHERE email = ?";
+    $checkStmt = mysqli_prepare($conn, $checkQuery);
+    mysqli_stmt_bind_param($checkStmt, "s", $email);
+    mysqli_stmt_execute($checkStmt);
+    mysqli_stmt_store_result($checkStmt);
 
-  if (mysqli_stmt_num_rows($checkStmt) > 0) {
-    echo "<script>alert('Email sudah terdaftar! Silakan login.'); window.location='login.php';</script>";
+    if (mysqli_stmt_num_rows($checkStmt) > 0) {
+      $error = "Email sudah terdaftar! Silakan login.";
+    }
     mysqli_stmt_close($checkStmt);
-    exit;
-  }
-  mysqli_stmt_close($checkStmt);
-
-  // Enkripsi password
-  $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-  // Simpan data user
-  $query = "INSERT INTO users (name, email, password, address, phone, photo) VALUES (?, ?, ?, ?, ?, 'default.png')";
-  $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "sssss", $name, $email, $passwordHash, $address, $phone);
-
-  if (mysqli_stmt_execute($stmt)) {
-    echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location='login.php';</script>";
-    exit;
-  } else {
-    echo "<script>alert('Terjadi kesalahan saat registrasi.'); window.history.back();</script>";
   }
 
-  mysqli_stmt_close($stmt);
+  if ($error === "") {
+    // Simpan user
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    $query = "INSERT INTO users (name, email, password, address, phone, photo) VALUES (?, ?, ?, ?, ?, 'default.png')";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "sssss", $name, $email, $passwordHash, $address, $phone);
+
+    if (mysqli_stmt_execute($stmt)) {
+      $success = "Registrasi berhasil! Silakan login.";
+    } else {
+      $error = "Terjadi kesalahan saat registrasi.";
+    }
+    mysqli_stmt_close($stmt);
+  }
 }
 
-$error = $error ?? "";
 include __DIR__ . '/../Views/register.php';

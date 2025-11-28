@@ -1,80 +1,30 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Contact Us - Global Time</title>
+  <title>Hubungi Kami - Portal Berita</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="kontak.css?v=3">
+  <link rel="stylesheet" href="/Views/css/kontak.css">
 </head>
 
 <body>
   <!-- HEADER -->
-  <header class="main-header">
-    <div class="header-inner">
-      <div class="brand-left">
-        <img src="Globaltime.png" alt="Logo Global Time" class="logo">
-        <div>
-          <h1 class="brand">Global Time</h1>
-          <p class="brand-sub">Berita Terpercaya, Perspektif Global</p>
-        </div>
-      </div>
-      <div class="user-right">
-        <div class="search-container">
-          <form class="search-form" action="berita.php" method="GET">
-            <input type="text" name="q" placeholder="Cari berita..." class="search-input">
-            <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
-          </form>
-        </div>
-
-        <div class="profile-dropdown">
-          <a href="#" class="user-profile" onclick="toggleProfileMenu(event)">
-            <div class="user-avatar">
-              <i class="fas fa-user"></i>
-            </div>
-            <span class="hello">Halo, <strong><?php echo $_SESSION['user']['name']; ?></strong></span>
-            <i class="fas fa-chevron-down"></i>
-          </a>
-          <div class="profile-menu">
-            <a href="profile.php"><i class="fas fa-user-edit"></i> Edit Profile</a>
-            <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <nav class="news-nav">
-      <div class="nav-container">
-        <ul class="nav-menu">
-          <li><a href="home.php"><i class="fas fa-home"></i> Home</a></li>
-          <li class="dropdown">
-            <a href="berita.php" class="dropdown-toggle"><i class="fas fa-newspaper"></i> Berita <i
-                class="fas fa-chevron-down"></i></a>
-            <ul class="dropdown-menu">
-              <?php foreach ($kategori_list as $kat): ?>
-                <li><a href="berita.php?kategori=<?= urlencode($kat) ?>"><?= htmlspecialchars($kat) ?></a></li>
-              <?php endforeach; ?>
-            </ul>
-          </li>
-          <li><a href="aboutUs.php"><i class="fas fa-info-circle"></i> About Us</a></li>
-          <li><a href="galeri.php"><i class="fas fa-images"></i> Galeri</a></li>
-          <li><a href="live.php"><i class="fas fa-video"></i> Live Streaming</a></li>
-          <li><a href="loker.php"><i class="fas fa-briefcase"></i> Loker</a></li>
-          <li><a href="kontak.php"><i class="fas fa-envelope"></i> Kontak</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+  <?php include 'header_user.php'; ?>
 
   <!-- MAIN CONTENT -->
   <main class="content">
+    
+    <!-- CONTACT HEADER -->
     <section class="contact-header">
       <h1><i class="fas fa-envelope"></i> Hubungi Kami</h1>
       <p>Kami siap mendengar kritik, saran, dan pertanyaan Anda</p>
     </section>
 
     <div class="contact-wrapper">
+      
       <!-- INFO KONTAK -->
       <div class="contact-info-section">
         <div class="info-card">
@@ -112,60 +62,70 @@
 
       <!-- FORM KONTAK -->
       <div class="contact-form-section">
-        <h2><?= $edit_mode ? '<i class="fas fa-edit"></i> Edit Pesan' : 'Kirim Pesan' ?></h2>
+        <h2>
+          <?php if ($edit_mode): ?>
+            <i class="fas fa-edit"></i> Edit Pesan
+          <?php else: ?>
+            <i class="fas fa-paper-plane"></i> Kirim Pesan
+          <?php endif; ?>
+        </h2>
 
-        <!-- PESAN SUKSES -->
-        <?php if (isset($success)): ?>
+        <!-- ✅ PESAN SUKSES -->
+        <?php if (!empty($success)): ?>
           <div class="alert alert-success">
             <i class="fas fa-check-circle"></i>
-            <p><?php echo $success; ?></p>
+            <p><?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?></p>
           </div>
         <?php endif; ?>
 
-        <!-- PESAN ERROR -->
-        <?php if (isset($error)): ?>
+        <!-- ✅ PESAN ERROR -->
+        <?php if (!empty($error)): ?>
           <div class="alert alert-error">
             <i class="fas fa-exclamation-circle"></i>
-            <p><?php echo $error; ?></p>
+            <p><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
           </div>
         <?php endif; ?>
 
-        <!-- FORM -->
+        <!-- ✅ FORM -->
         <form method="POST" id="contactForm">
           <?php if ($edit_mode): ?>
-            <input type="hidden" name="id" value="<?= $edit_data['id'] ?>">
+            <input type="hidden" name="id" value="<?= intval($edit_data['id']) ?>">
           <?php endif; ?>
 
           <div class="form-group">
             <label for="name"><i class="fas fa-user"></i> Nama Lengkap</label>
-            <input type="text" id="name" name="name" required placeholder="Masukkan nama lengkap Anda"
-              value="<?= $edit_mode ? htmlspecialchars($edit_data['nama']) : '' ?>">
+            <input type="text" id="name" name="name" required minlength="3" maxlength="100"
+              placeholder="Masukkan nama lengkap Anda"
+              value="<?= $edit_mode ? htmlspecialchars($edit_data['nama'], ENT_QUOTES, 'UTF-8') : '' ?>">
           </div>
 
           <div class="form-group">
             <label for="email"><i class="fas fa-envelope"></i> Email</label>
-            <input type="email" id="email" name="email" required placeholder="nama@email.com"
-              value="<?= $edit_mode ? htmlspecialchars($edit_data['email']) : '' ?>">
+            <input type="email" id="email" name="email" required 
+              placeholder="nama@email.com"
+              value="<?= $edit_mode ? htmlspecialchars($edit_data['email'], ENT_QUOTES, 'UTF-8') : '' ?>">
           </div>
 
           <div class="form-group">
             <label for="subject"><i class="fas fa-tag"></i> Subjek</label>
-            <input type="text" id="subject" name="subject" required placeholder="Subjek pesan"
-              value="<?= $edit_mode ? htmlspecialchars($edit_data['subjek']) : '' ?>">
+            <input type="text" id="subject" name="subject" required minlength="5" maxlength="200"
+              placeholder="Subjek pesan"
+              value="<?= $edit_mode ? htmlspecialchars($edit_data['subjek'], ENT_QUOTES, 'UTF-8') : '' ?>">
           </div>
 
           <div class="form-group">
             <label for="message"><i class="fas fa-comment"></i> Pesan</label>
-            <textarea id="message" name="message" rows="6" required
-              placeholder="Tulis pesan Anda di sini..."><?= $edit_mode ? htmlspecialchars($edit_data['pesan']) : '' ?></textarea>
+            <textarea id="message" name="message" rows="6" required minlength="10"
+              placeholder="Tulis pesan Anda di sini..."><?= $edit_mode ? htmlspecialchars($edit_data['pesan'], ENT_QUOTES, 'UTF-8') : '' ?></textarea>
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="btn-submit">
-              <i class="fas fa-paper-plane"></i> <?= $edit_mode ? 'Update Pesan' : 'Kirim Pesan' ?>
+            <button type="submit" name="submit_message" value="1" class="btn-submit">
+              <i class="fas fa-paper-plane"></i> 
+              <?= $edit_mode ? 'Update Pesan' : 'Kirim Pesan' ?>
             </button>
             <?php if ($edit_mode): ?>
-              <a href="kontak.php" class="btn-cancel">
+              <a href="?page=kontak" class="btn-cancel">
                 <i class="fas fa-times"></i> Batal
               </a>
             <?php endif; ?>
@@ -174,7 +134,7 @@
       </div>
     </div>
 
-    <!-- RIWAYAT PESAN -->
+    <!-- ✅ RIWAYAT PESAN -->
     <?php if (!empty($messages)): ?>
       <section class="messages-history">
         <h2><i class="fas fa-history"></i> Riwayat Pesan Anda</h2>
@@ -198,19 +158,36 @@
                 <tr>
                   <td><?= $no++ ?></td>
                   <td><?= date('d/m/Y H:i', strtotime($msg['tanggal'])) ?></td>
-                  <td><strong><?= htmlspecialchars($msg['subjek']) ?></strong></td>
-                  <td><?= htmlspecialchars(substr($msg['pesan'], 0, 50)) ?>...</td>
+                  <td><strong><?= htmlspecialchars($msg['subjek'], ENT_QUOTES, 'UTF-8') ?></strong></td>
+                  <td><?= htmlspecialchars(substr($msg['pesan'], 0, 50), ENT_QUOTES, 'UTF-8') ?>...</td>
+                  
+                  <!-- ✅ STATUS BADGE -->
                   <td>
                     <span class="status-badge status-<?= $msg['status'] ?>">
-                      <?= ucfirst($msg['status']) ?>
+                      <?php 
+                        if ($msg['status'] === 'baru') echo '🆕 Baru';
+                        elseif ($msg['status'] === 'dibaca') echo '👁️ Dibaca';
+                        else echo '✓ Selesai';
+                      ?>
                     </span>
                   </td>
+                  
+                  <!-- ✅ AKSI -->
                   <td>
                     <div class="action-buttons">
-                      <a href="kontak.php?edit=<?= $msg['id'] ?>" class="btn-edit" title="Edit">
-                        <i class="fas fa-edit"></i> Edit
-                      </a>
-                      <a href="kontak.php?delete=<?= $msg['id'] ?>" class="btn-delete"
+                      <!-- ✅ EDIT HANYA JIKA STATUS = BARU -->
+                      <?php if ($msg['status'] === 'baru'): ?>
+                        <a href="?page=kontak&edit=<?= intval($msg['id']) ?>" class="btn-edit" title="Edit">
+                          <i class="fas fa-edit"></i> Edit
+                        </a>
+                      <?php else: ?>
+                        <button class="btn-edit-disabled" disabled title="Hanya bisa edit pesan berstatus Baru">
+                          <i class="fas fa-edit"></i> Edit
+                        </button>
+                      <?php endif; ?>
+
+                      <!-- ✅ DELETE KAPAN SAJA -->
+                      <a href="?page=kontak&delete=<?= intval($msg['id']) ?>" class="btn-delete"
                         onclick="return confirm('Yakin ingin menghapus pesan ini?')" title="Hapus">
                         <i class="fas fa-trash"></i> Hapus
                       </a>
@@ -222,59 +199,20 @@
           </table>
         </div>
       </section>
+    <?php else: ?>
+      <section class="messages-history">
+        <div class="no-messages">
+          <i class="fas fa-inbox" style="font-size: 48px;"></i>
+          <p>Belum ada riwayat pesan</p>
+        </div>
+      </section>
     <?php endif; ?>
+    
   </main>
 
   <!-- FOOTER -->
-  <footer class="contact-footer">
-    <div class="footer-container">
-      <div class="footer-left">
-        <div class="footer-brand">
-          <img src="Globaltime.png" alt="Logo Global Time" class="footer-logo">
-          <div class="footer-brand-text">
-            <h2 class="agency-name">Global Time</h2>
-            <p class="agency-tagline">Berita Terpercaya, Perspektif Global</p>
-          </div>
-        </div>
+  <?php include 'footer_user.php'; ?>
 
-        <div class="about-section">
-          <h3>TENTANG KAMI</h3>
-          <p>Global Time adalah platform berita terpercaya yang menghadirkan informasi terkini dari seluruh dunia dengan
-            perspektif yang objektif dan mendalam. Kami berkomitmen memberikan berita berkualitas untuk masyarakat
-            Indonesia.</p>
-        </div>
-      </div>
-
-      <div class="contact-grid">
-        <div class="contact-section">
-          <h3>KANTOR INDONESIA</h3>
-          <p><a href="mailto:editorial@globaltime.com">editorial@globaltime.com</a></p>
-          <p>+62 341 1234567</p>
-          <p>Jl. Soekarno Hatta No.15,<br>Lowokwaru, Malang, Jawa Timur</p>
-          <p><a href="#">LIHAT PETA ↗</a></p>
-        </div>
-        <div class="contact-section">
-          <h3>TETAP TERUPDATE</h3>
-          <p><a href="#">LANGGANAN NEWSLETTER KAMI ↗</a></p>
-          <h3 style="margin-top: 30px;">IKUTI GLOBAL TIME</h3>
-          <div class="social-links">
-            <a href="#" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-link" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link" title="TikTok"><i class="fab fa-tiktok"></i></a>
-            <a href="#" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2025 Global Time. Hak Cipta Dilindungi. | <a href="#">Kebijakan Privasi</a> | <a href="#">Syarat &
-          Ketentuan</a></p>
-    </div>
-  </footer>
-
-  <script src="kontak.js"></script>
 </body>
 
 </html>

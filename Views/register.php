@@ -4,12 +4,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
-<link rel="stylesheet" href="/project/Views/css/login.css">
+  <link rel="stylesheet" href="/Views/css/login.css">
 </head>
 
 <body>
   <div class="form-container">
     <h2>Register Portal Berita</h2>
+    <?php if (!empty($error)) : ?>
+      <div style="background:#ffdddd;color:#a00;padding:10px;border-radius:5px;margin-bottom:10px;">
+        <?= $error ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (!empty($success)) : ?>
+      <div style="background:#ddffdd;color:#0a0;padding:10px;border-radius:5px;margin-bottom:10px;">
+        <?= $success ?>
+      </div>
+
+      <script>
+        setTimeout(() => {
+          window.location = "index.php?page=login";
+        }, 1500);
+      </script>
+    <?php endif; ?>
     <form method="POST">
       <input type="text" name="name" placeholder="Nama Lengkap" required>
       <input type="email" name="email" placeholder="Email" required>

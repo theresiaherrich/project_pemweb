@@ -1,4 +1,4 @@
-<?php include 'data.php';
+<?php 
 session_start();
 include __DIR__ . '/../model/koneksi.php';
 
@@ -7,34 +7,48 @@ if (!isset($_SESSION['user'])) {
   exit();
 }
 
-$kategori_query = "SELECT DISTINCT kategori FROM berita ORDER BY kategori ASC";
+// Ambil kategori dari tabel kategori
+$kategori_query = "SELECT DISTINCT nama_kategori FROM kategori ORDER BY nama_kategori ASC";
 $kategori_result = mysqli_query($conn, $kategori_query);
 $kategori_list = [];
 if ($kategori_result && mysqli_num_rows($kategori_result) > 0) {
   while ($row = mysqli_fetch_assoc($kategori_result)) {
-    $kategori_list[] = $row['kategori'];
+    $kategori_list[] = $row['nama_kategori'];
   }
 }
-// Ambil ID berita dari parameter URL
-$id_terpilih = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$berita_ditemukan = null;
 
-// Ambil data berita berdasarkan ID
-if ($id_terpilih > 0) {
-    $query = "SELECT * FROM berita WHERE id_berita = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id_terpilih);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $berita_ditemukan = mysqli_fetch_assoc($result);
+// Ambil data video dari tabel galeri
+$videos = [];
+$video_query = "SELECT 
+                  id,
+                  title,
+                  url,
+                  thumbnail,
+                  duration,
+                  category,
+                  date
+                FROM galeri
+                ORDER BY date DESC";
 
-    // Tambah jumlah views jika berita ditemukan
-    if ($berita_ditemukan) {
-        $update_views = "UPDATE berita SET views = views + 1 WHERE id_berita = ?";
-        $stmt_update = mysqli_prepare($conn, $update_views);
-        mysqli_stmt_bind_param($stmt_update, "i", $id_terpilih);
-        mysqli_stmt_execute($stmt_update);
-    }
+$video_result = mysqli_query($conn, $video_query);
+
+if ($video_result && mysqli_num_rows($video_result) > 0) {
+  while ($row = mysqli_fetch_assoc($video_result)) {
+    // Format tanggal jika perlu
+    $tanggal_format = date('d M Y', strtotime($row['date']));
+    
+    $videos[] = [
+      'id' => $row['id'],
+      'title' => htmlspecialchars($row['title']),
+      'url' => htmlspecialchars($row['url']),
+      'thumbnail' => htmlspecialchars($row['thumbnail']),
+      'duration' => htmlspecialchars($row['duration']),
+      'category' => htmlspecialchars($row['category']),
+      'date' => $tanggal_format
+    ];
+  }
 }
+
 $error = $error ?? "";
 include __DIR__ . '/../Views/galeri.php';
+?>

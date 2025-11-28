@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -6,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile - Global Time</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="edit-profile.css">
+  <link rel="stylesheet" href="/Views/css/edit-profile.css">
 </head>
 
 <body>
 
   <div class="card">
     <div class="card-header">
-      <a href="profile.php" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+      <a href="index.php?page=profile" class="back-btn"><i class="fas fa-arrow-left"></i></a>
       <div class="profile-pic">
         <img src="uploads/<?= htmlspecialchars($user['photo']) ?>" alt="Profile">
       </div>
@@ -22,6 +23,17 @@
     <div class="card-body">
       <h2>Edit Profil</h2>
       <p class="user-bio">Ubah data profilmu di bawah ini</p>
+      <?php if (!empty($error)) : ?>
+        <div style="background:#ffdddd;color:#a00;padding:10px;border-radius:6px;margin-bottom:15px;">
+          <?= $error ?>
+        </div>
+      <?php endif; ?>
+
+      <?php if (!empty($success)) : ?>
+        <div style="background:#ddffdd;color:#0a0;padding:10px;border-radius:6px;margin-bottom:15px;">
+          <?= $success ?>
+        </div>
+      <?php endif; ?>
 
       <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
@@ -60,4 +72,5 @@
     </div>
   </div>
 </body>
+
 </html>

@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-<link rel="stylesheet" href="/project/Views/css/login.css">
+<link rel="stylesheet" href="/Views/css/login.css">
 
 </head>
 
@@ -17,7 +18,7 @@
             <button type="submit" class="btn">Login</button>
         </form>
         <p style="color:red;"><?php echo $error; ?></p>
-        <p>Belum punya akun? <a href="?page=register">Register di sini</a></p>
+        <p>Belum punya akun? <a href="index.php?page=register">Register di sini</a></p>
     </div>
 </body>
 

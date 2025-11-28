@@ -1,42 +1,74 @@
 <?php
 session_start();
-
 include __DIR__ . '/../model/koneksi.php';
 
+// ===============================
+// 0. Proteksi Login
+// ===============================
 if (!isset($_SESSION['user'])) {
-  header("Location: ?page=login");
-  exit();
+    header("Location: ?page=login");
+    exit();
 }
 
-$kategori_query = "SELECT DISTINCT kategori FROM berita ORDER BY kategori ASC";
-$kategori_result = mysqli_query($conn, $kategori_query);
+// ===============================
+// 1. Ambil Kategori dari tabel kategori
+// ===============================
 $kategori_list = [];
-if ($kategori_result && mysqli_num_rows($kategori_result) > 0) {
-  while ($row = mysqli_fetch_assoc($kategori_result)) {
-    $kategori_list[] = $row['kategori'];
-  }
+
+$stmtKat = $conn->prepare("SELECT id, nama_kategori FROM kategori ORDER BY nama_kategori ASC");
+$stmtKat->execute();
+$resultKat = $stmtKat->get_result();
+
+while ($row = $resultKat->fetch_assoc()) {
+    $kategori_list[] = $row; 
 }
-// Ambil ID berita dari parameter URL
-$id_terpilih = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// ===============================
+// 2. Ambil ID Berita dari URL + sanitasi
+// ===============================
+$id_terpilih = isset($_GET['id']) ? $_GET['id'] : 0;
+
+// Validasi ID hanya angka
+if (!ctype_digit($id_terpilih)) {
+    $id_terpilih = 0;
+} else {
+    $id_terpilih = (int)$id_terpilih;
+}
+
 $berita_ditemukan = null;
 
-// Ambil data berita berdasarkan ID
+// ===============================
+// 3. Ambil berita berdasarkan ID (JOIN kategori)
+// ===============================
 if ($id_terpilih > 0) {
-    $query = "SELECT * FROM berita WHERE id_berita = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "i", $id_terpilih);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $berita_ditemukan = mysqli_fetch_assoc($result);
 
-    // Tambah jumlah views jika berita ditemukan
+    $stmt = $conn->prepare("
+        SELECT b.*, k.nama_kategori 
+        FROM berita b
+        JOIN kategori k ON b.kategori_id = k.id
+        WHERE b.id_berita = ?
+    ");
+
+    $stmt->bind_param("i", $id_terpilih);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $berita_ditemukan = $result->fetch_assoc();
+
+    // ===============================
+    // 4. Tambah jumlah views jika berita ditemukan
+    // ===============================
     if ($berita_ditemukan) {
-        $update_views = "UPDATE berita SET views = views + 1 WHERE id_berita = ?";
-        $stmt_update = mysqli_prepare($conn, $update_views);
-        mysqli_stmt_bind_param($stmt_update, "i", $id_terpilih);
-        mysqli_stmt_execute($stmt_update);
+        $stmtUpdate = $conn->prepare("
+            UPDATE berita SET views = views + 1 WHERE id_berita = ?
+        ");
+        $stmtUpdate->bind_param("i", $id_terpilih);
+        $stmtUpdate->execute();
     }
 }
-$error = $error ?? "";
-include __DIR__ . '/../Views/detail_berita.php';
 
+$error = $error ?? "";
+
+// ===============================
+// 5. Load View
+// ===============================
+include __DIR__ . '/../Views/detail_berita.php';
